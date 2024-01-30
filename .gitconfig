@@ -1,3 +1,6 @@
+[user]
+	name = Uzhanin Egor
+	email = egor.uzhanin@gmail.com
 [alias]
 	ln = "!f() { git clone $1; }; f"
 	c = "!f() { category=\"$1\";  commit_message=\"$2\"; git add . && git commit -m \"$category: $commit_message\"; }; f"
@@ -32,7 +35,9 @@
 	bd = branch -d
 	bl = branch
 
-	rem = remote add origin
+	rem = remote add origin 
+	remv = remote remove origin
+	rems = "!f() { git remote remove origin; git remote add origin; }; f"
 	l = log --oneline
 	dwn = reset --soft HEAD~1
 	hd = rm --cached -r -f
