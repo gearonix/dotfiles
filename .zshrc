@@ -1,3 +1,4 @@
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -83,7 +84,7 @@ alias b='(){ google-chrome https://"$1" }'
 alias d.ps='docker ps'
 alias d.c='docker compose up'
 
-clean-docker() {
+clear-docker-cache() {
   docker kill $(docker ps -a -q)
   docker rm -vf $(docker ps -aq)
 
@@ -93,16 +94,23 @@ clean-docker() {
   docker volume prune
 }
 
-clear-docker() {
+dcr-cl() {
      docker rm -vf $(docker ps -aq)
 }
 
+dcr-cu() {
+    docker compose up -d
+}
+
+dcr-r() {
+    docker rm -vf $(docker ps -aq) && docker compose up -d
+}
+
 # pms
-clean-cache() {
+clean-nm-cache() {
     pnpm store prune
     yarn cache clean
     npm cache clean --force
-    
 }
 
 # apps
@@ -155,45 +163,43 @@ export PASTH="$HOME/.local/bin:$PATH"
 
 export NNN_OPENER=subl
 
+# NVM LAZY LOAD
+# DUE TO SLOW STARTUP ON ZSH
+
+zstyle ':omz:plugins:nvm' lazy yes
+
+NVM_DIR="$HOME/.nvm"
+
+# Skip adding binaries if there is no node version installed yet
+if [ -d $NVM_DIR/versions/node ]; then
+  NODE_GLOBALS=(`find $NVM_DIR/versions/node -maxdepth 3 \( -type l -o -type f \) -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
+fi
+NODE_GLOBALS+=("nvm")
+
+load_nvm () {
+  # Unset placeholder functions
+  for cmd in "${NODE_GLOBALS[@]}"; do unset -f ${cmd} &>/dev/null; done
+
+  # Load NVM
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+  # (Optional) Set the version of node to use from ~/.nvmrc if available
+  # nvm use 2> /dev/null 1>&2 || true
+
+  # Do not reload nvm again
+  export NVM_LOADED=1
+}
+
+for cmd in "${NODE_GLOBALS[@]}"; do
+  # Skip defining the function if the binary is already in the PATH
+  if ! which ${cmd} &>/dev/null; then
+    eval "${cmd}() { unset -f ${cmd} &>/dev/null; [ -z \${NVM_LOADED+x} ] && load_nvm; ${cmd} \$@; }"
+  fi
+done
+
+
+source $HOME/scripts/quitcd.zsh
 
 export NNN_PLUG='p:preview-tui'
 export NNN_FIFO=/tmp/nnn.fifo
 
-source $HOME/scripts/quitcd.zsh
-
-
-# commented, due to bugs and slow load time in zsh
-
-## NVM LAZY LOAD
-## DUE TO SLOW STARTUP ON ZSH
-
-# zstyle ':omz:plugins:nvm' lazy yes
-
-# NVM_DIR="$HOME/.nvm"
-
-# # Skip adding binaries if there is no node version installed yet
-# if [ -d $NVM_DIR/versions/node ]; then
-#   NODE_GLOBALS=(`find $NVM_DIR/versions/node -maxdepth 3 \( -type l -o -type f \) -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
-# fi
-# NODE_GLOBALS+=("nvm")
-
-# load_nvm () {
-#   # Unset placeholder functions
-#   for cmd in "${NODE_GLOBALS[@]}"; do unset -f ${cmd} &>/dev/null; done
-
-#   # Load NVM
-#   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
-#   # (Optional) Set the version of node to use from ~/.nvmrc if available
-#   nvm use 2> /dev/null 1>&2 || true
-
-#   # Do not reload nvm again
-#   export NVM_LOADED=1
-# }
-
-# for cmd in "${NODE_GLOBALS[@]}"; do
-#   # Skip defining the function if the binary is already in the PATH
-#   if ! which ${cmd} &>/dev/null; then
-#     eval "${cmd}() { unset -f ${cmd} &>/dev/null; [ -z \${NVM_LOADED+x} ] && load_nvm; ${cmd} \$@; }"
-#   fi
-# done
