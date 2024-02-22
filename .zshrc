@@ -23,7 +23,7 @@ alias dsk="cd /home/grnx/dsk"
 alias hub="cd /home/grnx/dsk/hub"
 alias h="cd /home/grnx/dsk/hub"
 alias cln="cd /home/grnx/dsk/cln"
-alias prj='cd /home/grnx/dsk/prj/general'
+alias prj="cd /home/grnx/dsk/prj"
 alias dwl="cd /home/grnx/dwl"
 alias tsh="cd /home/grnx/dsk/tsh"
 
@@ -31,6 +31,7 @@ alias tsh="cd /home/grnx/dsk/tsh"
 alias clnmv='(){ mv "$1" /home/grnx/dsk/cln; }'
 alias trashmv='(){ mv "$1" /home/grnx/dsk/trash; }'
 alias svd='(){ cp -r "$1" /home/grnx/svd; }'
+alias w='ws .'
 
 # helpers
 alias unpack='(){ mv "$1"/* . && rm -rf "$1"; }'
@@ -202,4 +203,16 @@ source $HOME/scripts/quitcd.zsh
 
 export NNN_PLUG='p:preview-tui'
 export NNN_FIFO=/tmp/nnn.fifo
+export NNN_COLORS='FFFFFFFF'
 
+export PF_COLOR=0
+
+# startup terminal windows
+
+# gnome-terminal --window --maximize --full-screen \
+#  -- /bin/zsh -c "cd /home/grnx/dsk/hub && nnn; exec /bin/zsh"
+# gnome-terminal --geometry=120x80+1920+5 \ 
+#  --window --maximize --full-screen -- /bin/zsh -c  \ 
+# "cd /home/grnx/dsk && PF_COLOR=0 pfetch; exec /bin/zsh"
+
+gsettings set org.gnome.desktop.interface enable-animations false
