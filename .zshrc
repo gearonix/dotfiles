@@ -31,6 +31,7 @@ alias tsh="cd /home/grnx/dsk/tsh"
 alias clnmv='(){ mv "$1" /home/grnx/dsk/cln; }'
 alias trashmv='(){ mv "$1" /home/grnx/dsk/trash; }'
 alias svd='(){ cp -r "$1" /home/grnx/svd; }'
+alias r='rs .'
 alias w='ws .'
 
 # helpers
@@ -56,12 +57,13 @@ alias q='exit'
 alias systl="sudo systemctl"
 alias off="shutdown now"
 alias c='(){cd "$1"}'
-alias r='(){ rm -rf "$1" && ls -a }'
 alias reb='reboot'
 
 # scripts
 alias sc.clean-nodes="(){bash ~/scripts/clean-nodes.sh "$(pwd)";}" 
 alias sc.inject-eslint="bash ~/scripts/inject-eslint.sh"
+alias dgf='bash ~/scripts/download-git-folder.sh'
+
 
 # extras
 alias editrc='subl ~/.zshrc'
@@ -77,9 +79,9 @@ alias loc='(){ google-chrome http://localhost:"${1:-3000}"; }'
 alias locs='google-chrome http://localhost:6868'
 alias github='google-chrome https://github.com/gearonix'
 alias bgh='(){ google-chrome http://github.com/"${1}"/"${2}" >/dev/null 2>&1 &; }'
+alias ghb='gh browse >/dev/null 2>&1 &'
 alias bpm='(){ google-chrome http://npmjs.com/"${1}"/"${2}"; }'
 alias b='(){ google-chrome https://"$1" }'
-# alias n=nnn
 
 # docker
 alias d.ps='docker ps'
@@ -120,7 +122,11 @@ tg() {
 }
 
 ws() {
-    /home/grnx/dwl/webstorm/bin/webstorm.sh "$1" >/dev/null 2>&1 &
+    /home/grnx/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm.sh "$1" >/dev/null 2>&1 &
+}
+
+rs() {
+    /home/grnx/.local/share/JetBrains/Toolbox/apps/rustrover-2/bin/rustrover.sh "$1" >/dev/null 2>&1 &
 }
 
 ch() {
@@ -206,13 +212,14 @@ export NNN_FIFO=/tmp/nnn.fifo
 export NNN_COLORS='FFFFFFFF'
 
 export PF_COLOR=0
+export NODE_OPTIONS='--inspect'
 
-# startup terminal windows
+# TERMINALS
 
-# gnome-terminal --window --maximize --full-screen \
-#  -- /bin/zsh -c "cd /home/grnx/dsk/hub && nnn; exec /bin/zsh"
-# gnome-terminal --geometry=120x80+1920+5 \ 
-#  --window --maximize --full-screen -- /bin/zsh -c  \ 
-# "cd /home/grnx/dsk && PF_COLOR=0 pfetch; exec /bin/zsh"
+# gnome-terminal --window --maximize --full-screen -- /bin/zsh -c "cd /home/grnx/dsk/hub; source /home/grnx/scripts/quitcd.zsh && n && exec /bin/zsh"
+
+# gnome-terminal --geometry=120x80+1920+5 --window --maximize --full-screen -- /bin/zsh -c "cd /home/grnx/dsk && PF_COLOR=0 pfetch; exec /bin/zsh"
 
 gsettings set org.gnome.desktop.interface enable-animations false
+
+
