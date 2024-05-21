@@ -51,7 +51,7 @@ alias ffind='find . -name'
 alias s='sudo'
 alias th='touch'
 alias ca='cat'
-alias l='(){cd "$1" && ls -a}'
+alias l='eza -o -l --git --hyperlink'
 alias lr='ls -tra'
 alias q='exit'
 alias systl="sudo systemctl"
@@ -133,6 +133,8 @@ ch() {
     google-chrome "$1" >/dev/null 2>&1 &
 }
 
+export UNPKG_EDITOR_CLI="/home/grnx/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm.sh ."
+
 # aliases
 aliases() {
     if [ -f "$PWD/.aliasrc" ]; then
@@ -166,9 +168,10 @@ export NI_CONFIG_FILE="$HOME/.nirc"
 # see https://github.com/nektos/act
 export PATH="$PATH:$HOME/.act/bin"
 export PATH=~/.npm-global/bin:$PATH
-export PASTH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
-export NNN_OPENER=subl
+
+export NNN_OPENER=vim
 
 # NVM LAZY LOAD
 # DUE TO SLOW STARTUP ON ZSH
@@ -223,3 +226,4 @@ export NODE_OPTIONS='--inspect'
 gsettings set org.gnome.desktop.interface enable-animations false
 
 
+export FPATH="/opt/eza/completions/zsh:$FPATH"
